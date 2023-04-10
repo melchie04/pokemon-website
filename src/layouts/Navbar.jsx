@@ -16,7 +16,7 @@ import {
   Button,
 } from "@mui/material";
 import { Menu } from "@mui/icons-material";
-import pokeball from "../assets/icons/pokeball.png";
+import pokeweb from "../assets/icons/pokeweb.png";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -30,7 +30,7 @@ const Navbar = () => {
       <Typography variant="h6" sx={{ my: 2, fontFamily: "Fredoka" }}>
         <Link to="/">
           <img
-            src={pokeball}
+            src={pokeweb}
             alt="eatwell"
             width="30px"
             height="30px"
@@ -87,7 +87,7 @@ const Navbar = () => {
           >
             <Link to="/">
               <img
-                src={pokeball}
+                src={pokeweb}
                 alt="eatwell"
                 width="30px"
                 style={{ marginBottom: "-6px", marginRight: "5px" }}
