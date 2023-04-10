@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
 import { usePokemonContext } from "../context/ContextProvider";
 import { types, statNames } from "../utils/Constants";
 import {
@@ -9,6 +10,7 @@ import {
 } from "../utils/Functions";
 import CustomBox from "../components/CustomBox";
 import StatsBar from "../components/StatsBar";
+import { Link } from "react-router-dom";
 
 const Pokemon = () => {
   const { pokemon } = usePokemonContext();
@@ -22,8 +24,22 @@ const Pokemon = () => {
           boxShadow: "0px 3px 5px 0px rgba(0,0,0,0.4)",
           borderRadius: "10px",
           width: { xs: "100%", sm: "75%", md: "50%" },
+          position: "relative",
         }}
       >
+        <Link to="/">
+          <IconButton
+            aria-label="back"
+            sx={{
+              color: "primary.main",
+              position: "absolute",
+              top: "10px",
+              left: "10px",
+            }}
+          >
+            <ArrowBack />
+          </IconButton>
+        </Link>
         <CustomBox
           sx={{ borderBottom: "2px solid", borderColor: "secondary.main" }}
         >
