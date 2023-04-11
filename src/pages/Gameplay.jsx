@@ -69,6 +69,9 @@ const Gameplay = () => {
         return "#f44336";
       }
     }
+    if (result === "incorrect" && randomPokemon.correct.name === name) {
+      return "#00c853";
+    }
     return "#fff";
   };
 
@@ -77,6 +80,9 @@ const Gameplay = () => {
       if (result !== "") {
         return "#fff";
       }
+    }
+    if (result === "incorrect" && randomPokemon.correct.name === name) {
+      return "#fff";
     }
     return "primary.main";
   };

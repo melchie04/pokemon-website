@@ -93,7 +93,7 @@ const ContextProvider = ({ children }) => {
 
   const getRandomPokemon = async () => {
     const res = await axios.get(
-      "https://pokeapi.co/api/v2/pokemon?offset=0&limit=100000"
+      "https://pokeapi.co/api/v2/pokemon?offset=0&limit=1118"
     );
     const pokemon = res.data.results;
     const randomPokemon = shuffle(pokemon);
