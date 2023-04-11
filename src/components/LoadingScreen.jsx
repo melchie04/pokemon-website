@@ -12,15 +12,10 @@ const LoadingScreen = () => {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      width="100vw"
-      height="100vh"
+      height="80vh"
       position="relative"
     >
-      <img src={loader1} alt="loader-1" width="13%" height="auto" />
-      <img src={loader2} alt="loader-2" width="13%" height="auto" />
-      <img src={loader3} alt="loader-3" width="13%" height="auto" />
       <img src={loader4} alt="loader-4" width="13%" height="auto" />
-      <img src={loader5} alt="loader-5" width="13%" height="auto" />
     </Box>
   );
 };

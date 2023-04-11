@@ -28,9 +28,9 @@ const App = () => {
             <Route path="/gameplay" element={<Gameplay />} />
             <Route path="/pokemon/:id" element={<Pokemon />} />
           </Routes>
-          <Footer />
         </>
       )}
+      <Footer />
     </>
   );
 };
