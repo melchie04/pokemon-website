@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Button } from "@mui/material";
 import { usePokemonContext } from "../context/ContextProvider";
 import CustomBox from "../components/CustomBox";
@@ -14,36 +14,19 @@ const Gameplay = () => {
   const [answer, setAnswer] = useState("");
   const [result, setResult] = useState("");
   const [game, setGame] = useState({ play: false, label: "PLAY" });
+  const [imgLoading, setImgLoading] = useState(true);
 
-  useEffect(() => {
-    loadVoice();
-  }, []);
+  const handleImageLoad = () => {
+    setImgLoading(false);
+  };
 
   const playMusic = () => {
     const audio = new Audio(sound);
     audio.play();
   };
 
-  const loadVoice = () => {
-    window.speechSynthesis.onvoiceschanged = () => {
-      window.femaleVoice = speechSynthesis.getVoices()[4];
-    };
-  };
-
-  const speakAnswer = () => {
-    if (window.femaleVoice) {
-      const utterance = new SpeechSynthesisUtterance(
-        randomPokemon.correct.name
-      );
-      utterance.voice = window.femaleVoice;
-      utterance.pitch = 0.9;
-      utterance.rate = 0.85;
-      speechSynthesis.speak(utterance);
-    }
-  };
-
   const handleClickPlay = () => {
-    if (game.play) {
+    if (game.play && game.label === "STOP") {
       setGame({ play: false, label: "PLAY" });
       setLoading(true);
       setAnswer("");
@@ -72,7 +55,6 @@ const Gameplay = () => {
     } else {
       setResult("incorrect");
     }
-    speakAnswer();
     setTimeout(() => {
       startGame();
     }, 2000);
@@ -118,89 +100,108 @@ const Gameplay = () => {
           alt="gameplay_background"
           width="100%"
           height="100%"
-        />
-        <PokeText
+          onLoad={handleImageLoad}
           style={{
-            position: "absolute",
-            top: "22%",
-            right: "15%",
+            visibility: imgLoading ? "hidden" : "visible",
           }}
         />
-        {loading ? (
-          <Pokeball
+        {imgLoading ? null : (
+          <PokeText
             style={{
               position: "absolute",
-              top: "40%",
-              left: "22%",
+              top: "22%",
+              right: "15%",
             }}
           />
-        ) : (
-          <>
-            <RandomPokemon
-              randomImage={randomPokemon?.correct?.image}
-              style={{
-                filter: result === "" ? "brightness(0)" : null,
-                transition: "filter .5s ease-out",
-                position: "absolute",
-                top: "28%",
-                left: "14%",
-              }}
-            />
-          </>
         )}
-        <Button
-          variant="contained"
-          size="small"
-          onClick={handleClickPlay}
-          sx={{
-            backgroundColor: "#fff",
-            color: "primary.main",
-            marginTop: "1rem",
-            width: "200px",
-            fontFamily: "Fredoka",
-            borderRadius: "9999px",
-            boxShadow: "0px 0px 5px #0077FF",
-            "&:hover": {
+        {loading || game.play === false ? (
+          <>
+            {imgLoading ? null : (
+              <Pokeball
+                style={{
+                  position: "absolute",
+                  top: "40%",
+                  left: "22%",
+                }}
+              />
+            )}
+          </>
+        ) : null}
+        {game.play ? (
+          <>
+            {loading ? null : (
+              <RandomPokemon
+                randomImage={randomPokemon?.correct?.image}
+                style={{
+                  filter: result === "" ? "brightness(0)" : null,
+                  transition: "filter .5s ease-out",
+                  position: "absolute",
+                  top: "28%",
+                  left: "14%",
+                }}
+              />
+            )}
+          </>
+        ) : null}
+        {imgLoading ? null : (
+          <Button
+            variant="contained"
+            size="small"
+            onClick={handleClickPlay}
+            sx={{
               backgroundColor: "#fff",
-              boxShadow: "0px 0px 10px #0077FF",
-            },
-          }}
-        >
-          {game.label}
-        </Button>
+              color: "primary.main",
+              marginTop: "1rem",
+              width: "200px",
+              fontFamily: "Fredoka",
+              borderRadius: "9999px",
+              boxShadow: "0px 0px 5px #0077FF",
+              "&:hover": {
+                backgroundColor: "#fff",
+                boxShadow: "0px 0px 10px #0077FF",
+              },
+            }}
+          >
+            {game.label}
+          </Button>
+        )}
       </Box>
-      {loading ? null : (
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-          }}
-        >
-          {randomPokemon?.pokemonChoices?.map((choice) => (
-            <Button
-              key={choice.name}
-              variant="contained"
-              size="small"
-              onClick={() => handleClickAnswer(choice.name)}
+      {game.play ? (
+        <>
+          {loading ? null : (
+            <Box
               sx={{
-                backgroundColor: getBackgroundColor(choice.name),
-                color: getColor(choice.name),
-                marginTop: "1rem",
-                width: "45%",
-                fontFamily: "Fredoka",
-                boxShadow: "0px 0px 5px #000",
-                "&:hover": {
-                  backgroundColor: getBackgroundColor(choice.name),
-                  boxShadow: "0px 0px 5px #000",
-                },
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "space-between",
               }}
             >
-              {choice.name}
-            </Button>
-          ))}
-        </Box>
-      )}
+              {randomPokemon?.pokemonChoices?.map((choice) => (
+                <Button
+                  key={choice.name}
+                  variant="contained"
+                  size="small"
+                  onClick={() => handleClickAnswer(choice.name)}
+                  sx={{
+                    backgroundColor: getBackgroundColor(choice.name),
+                    color: getColor(choice.name),
+                    marginTop: "1rem",
+                    width: "45%",
+                    fontFamily: "Fredoka",
+                    boxShadow: "0px 0px 5px #000",
+                    "&:hover": {
+                      backgroundColor: getBackgroundColor(choice.name),
+                      boxShadow: "0px 0px 5px #000",
+                    },
+                  }}
+                >
+                  {choice.name}
+                </Button>
+              ))}
+            </Box>
+          )}
+        </>
+      ) : null}
     </CustomBox>
   );
 };
