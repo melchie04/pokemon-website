@@ -8,6 +8,7 @@ import React, {
 import axios from "axios";
 import { reducer } from "../reducer/Reducer";
 import Actions from "../utils/Actions";
+import { shuffle } from "../utils/Functions";
 
 const PokemonContext = createContext();
 
@@ -16,6 +17,7 @@ const ContextProvider = ({ children }) => {
   const [nextUrl, setNextUrl] = useState("");
   const [prevUrl, setPrevUrl] = useState("");
   const [pokemon, setPokemon] = useState({});
+  const [randomPokemon, setRandomPokemon] = useState({});
   const initialState = {
     loading: false,
     pokemonList: [],
@@ -89,6 +91,30 @@ const ContextProvider = ({ children }) => {
       });
   };
 
+  const getRandomPokemon = async () => {
+    const res = await axios.get(
+      "https://pokeapi.co/api/v2/pokemon?offset=0&limit=100000"
+    );
+    const pokemon = res.data.results;
+    const randomPokemon = shuffle(pokemon);
+    const pokemonChoices = randomPokemon.splice(0, 4);
+    const [firstPokemon] = pokemonChoices;
+    const image = getPokemonImage(firstPokemon);
+    setRandomPokemon({
+      pokemonChoices: shuffle(pokemonChoices),
+      correct: {
+        image,
+        name: firstPokemon.name,
+      },
+    });
+  };
+
+  const getPokemonImage = ({ url }) => {
+    const numberRegEx = /(\d+)\/$/;
+    const number = (url.match(numberRegEx) || [])[1];
+    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png`;
+  };
+
   useEffect(() => {
     initializeSearchList();
     initializePokemonList();
@@ -106,6 +132,8 @@ const ContextProvider = ({ children }) => {
         searchPokemon,
         pokemon,
         setPokemon,
+        randomPokemon,
+        getRandomPokemon,
       }}
     >
       {children}
