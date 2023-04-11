@@ -50,7 +50,7 @@ const Pokemon = () => {
           )}
           <Typography
             gutterBottom
-            variant="h4"
+            variant="h5"
             component="div"
             fontFamily="Fredoka"
           >
